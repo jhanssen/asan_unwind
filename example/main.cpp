@@ -1,11 +1,11 @@
 #include <asan_unwind.h>
 #include <cstdio>
 
-static void log(const std::pair<const uintptr_t*, size_t>& st)
+static void log(void* ptrs, size_t size)
 {
-    printf("   %zu frames\n", st.second);
-    for (size_t i = 0; i < st.second; ++i) {
-        printf("%lx\n", st.first[i]);
+    printf("   %zu frames\n", size);
+    for (size_t i = 0; i < size; ++i) {
+        printf("%lx\n", reinterpret_cast<uintptr_t*>(ptrs)[i]);
     }
 }
 
@@ -15,8 +15,10 @@ void func2()
 
 void func1()
 {
-    asan_unwind::StackTrace stackTrace;
-    log(stackTrace.unwind());
+    std::array<void*, 255> mFrames;
+    asan_unwind::StackTrace stackTrace(mFrames.data(), 255);
+    const auto num = stackTrace.unwind();
+    log(mFrames.data(), num);
     //func2();
 }
 

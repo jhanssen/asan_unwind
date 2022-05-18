@@ -9,24 +9,28 @@ namespace asan_unwind {
 class StackTrace
 {
 public:
-    StackTrace() = default;
+    StackTrace(void* frames, size_t maxFrames);
 
-    std::pair<const uintptr_t*, size_t> unwind();
+    size_t unwind();
 
 private:
     void unwind_internal();
 
-    enum { MaxFrames = 255 };
-
-    std::array<uintptr_t, MaxFrames> mFrames;
+    void* mFrames;
+    size_t mMaxFrames;
     size_t mFrameCount {};
 };
 
-inline std::pair<const uintptr_t*, size_t> StackTrace::unwind()
+inline StackTrace::StackTrace(void* frames, size_t maxFrames)
+    : mFrames(frames), mMaxFrames(maxFrames)
+{
+}
+
+inline size_t StackTrace::unwind()
 {
     if (!mFrameCount)
         unwind_internal();
-    return std::make_pair(mFrames.data(), mFrameCount);
+    return mFrameCount;
 }
 
 } // namespace asan_unwind
