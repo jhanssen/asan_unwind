@@ -28,8 +28,6 @@ void StackTrace::unwind_internal()
     uintptr_t pc = GET_CALLER_PC();
     uintptr_t bp = GET_CURRENT_FRAME();
 
-    printf("about to go %lx->%lx pc %lx bp %lx\n", stackbottom, stacktop, pc, bp);
-
     __sanitizer::FastStackTrace bst(mFrames.data());
     bst.UnwindFast(pc, bp, stacktop, stackbottom, MaxFrames);
     mFrameCount = bst.size;
