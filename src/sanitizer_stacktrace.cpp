@@ -13,12 +13,6 @@
 #include "sanitizer_stacktrace.h"
 #include <cassert>
 
-inline constexpr uintptr_t GetPageSizeCached()
-{
-    // rely on the page size being 4k here
-    return 4096;
-}
-
 inline constexpr bool IsAligned(uintptr_t a, uintptr_t alignment) {
     return (a & (alignment - 1)) == 0;
 }

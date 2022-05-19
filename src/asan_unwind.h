@@ -11,26 +11,17 @@ class StackTrace
 public:
     StackTrace(void* frames, size_t maxFrames);
 
-    size_t unwind();
+    size_t unwindFast();
+    size_t unwindSlow();
 
 private:
-    void unwind_internal();
-
     void* mFrames;
     size_t mMaxFrames;
-    size_t mFrameCount {};
 };
 
 inline StackTrace::StackTrace(void* frames, size_t maxFrames)
     : mFrames(frames), mMaxFrames(maxFrames)
 {
-}
-
-inline size_t StackTrace::unwind()
-{
-    if (!mFrameCount)
-        unwind_internal();
-    return mFrameCount;
 }
 
 } // namespace asan_unwind

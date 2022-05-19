@@ -105,6 +105,12 @@ static inline bool IsValidFrame(uintptr_t frame, uintptr_t stack_top, uintptr_t 
     return frame > stack_bottom && frame < stack_top - kFrameSize;
 }
 
+inline constexpr uintptr_t GetPageSizeCached()
+{
+    // rely on the page size being 4k here
+    return 4096;
+}
+
 }  // namespace __sanitizer
 
 #define GET_CALLER_PC() (uintptr_t) __builtin_return_address(0)

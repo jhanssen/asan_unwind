@@ -17,7 +17,11 @@ void func1()
 {
     std::array<void*, 255> mFrames;
     asan_unwind::StackTrace stackTrace(mFrames.data(), 255);
-    const auto num = stackTrace.unwind();
+    printf("fast\n");
+    auto num = stackTrace.unwindFast();
+    log(mFrames.data(), num);
+    printf("slow\n");
+    num = stackTrace.unwindSlow();
     log(mFrames.data(), num);
     //func2();
 }
