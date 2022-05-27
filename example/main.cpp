@@ -5,7 +5,7 @@ static void log(void* ptrs, size_t size)
 {
     printf("   %zu frames\n", size);
     for (size_t i = 0; i < size; ++i) {
-        printf("%lx\n", reinterpret_cast<uintptr_t*>(ptrs)[i]);
+        printf("%llx\n", static_cast<unsigned long long>(reinterpret_cast<uintptr_t*>(ptrs)[i]));
     }
 }
 

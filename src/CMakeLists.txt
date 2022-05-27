@@ -1,6 +1,6 @@
 set(SOURCES
-    asan_unwind.cpp
-    sanitizer_stacktrace.cpp)
+    asan_unwind.cpp)
+    # sanitizer_stacktrace.cpp)
 
 set_source_files_properties(${SOURCES} PROPERTIES COMPILE_FLAGS "-fno-omit-frame-pointer -Wall")
 
