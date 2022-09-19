@@ -18,10 +18,10 @@ void func1()
     std::array<void*, 255> mFrames;
     asan_unwind::StackTrace stackTrace(mFrames.data(), 255);
     printf("fast\n");
-    auto num = stackTrace.unwindFast();
+    auto num = stackTrace.unwindFast(0);
     log(mFrames.data(), num);
     printf("slow\n");
-    num = stackTrace.unwindSlow();
+    num = stackTrace.unwindSlow(0);
     log(mFrames.data(), num);
     //func2();
 }

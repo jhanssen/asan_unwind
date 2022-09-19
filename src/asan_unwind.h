@@ -11,8 +11,8 @@ class StackTrace
 public:
     StackTrace(void* frames, size_t maxFrames);
 
-    size_t unwindFast();
-    size_t unwindSlow();
+    size_t unwindFast(unsigned skip);
+    size_t unwindSlow(unsigned skip);
 
 private:
     void* mFrames;

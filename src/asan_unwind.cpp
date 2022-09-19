@@ -32,7 +32,7 @@ inline void StackLimits::init()
 
 thread_local StackLimits stackLimits;
 
-size_t StackTrace::unwindFast()
+size_t StackTrace::unwindFast(unsigned)
 {
     return 0;
     // if (stackLimits.stackaddr == nullptr)
@@ -55,6 +55,7 @@ size_t StackTrace::unwindFast()
 
 struct UnwindTraceArg {
     uintptr_t* frames;
+    unsigned skip;
     size_t numFrames;
     size_t maxFrames;
 };
@@ -76,13 +77,17 @@ static _Unwind_Reason_Code Unwind_Trace(struct _Unwind_Context *ctx, void *param
     // a platform where this isn't true, we need to reconsider this check.
     if (pc < kPageSize) return UNWIND_STOP;
     if (arg->numFrames >= arg->maxFrames) return UNWIND_STOP;
-    arg->frames[arg->numFrames++] = pc;
+    if (!arg->skip) {
+        arg->frames[arg->numFrames++] = pc;
+    } else {
+        --arg->skip;
+    }
     return UNWIND_CONTINUE;
 }
 
-size_t StackTrace::unwindSlow()
+size_t StackTrace::unwindSlow(unsigned skip)
 {
-    UnwindTraceArg arg = { reinterpret_cast<uintptr_t*>(mFrames), 0, mMaxFrames };
+    UnwindTraceArg arg = { reinterpret_cast<uintptr_t*>(mFrames), skip, 0, mMaxFrames };
     _Unwind_Backtrace(Unwind_Trace, &arg);
     return arg.numFrames;
 }
